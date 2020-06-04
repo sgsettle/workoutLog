@@ -14,12 +14,13 @@ router.get('/', (req, res) => {
 
 // POST 
 router.post('/', (req, res) => {
+  console.log(req.body);
   
   const logFromRequest = {
-    description: req.body.description,
-    definition: req.body.definition,
-    result: req.body.result,
-    owner_id: req. body.owner_id
+    description: req.body.log.description,
+    definition: req.body.log.definition,
+    result: req.body.log.result,
+    owner_id: req.user.id
   }
 
   Log.create(logFromRequest)
@@ -48,7 +49,7 @@ router.get('/:id', (req, res) => {
 
 // UPDATE
 router.put('/:id', (req, res) => {
-  Log.update(req.body, {
+  Log.update(req.body.log, {
     where: {
       id:req.params.id
     }

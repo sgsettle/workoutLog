@@ -5,9 +5,10 @@ const jwt = require('jsonwebtoken');
 
 // SIGNUP
 router.post('/register', (req, res) => {
+    console.log(req.body);
     User.create({
-        userName: req.body.userName,
-        password: bcrypt.hashSync(req.body.password, 10)
+        userName: req.body.user.username,
+        password: bcrypt.hashSync(req.body.user.password, 10)
         // salt - 10 stands for number of times it will be salted and generate random data
     })
     .then(
@@ -28,12 +29,12 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     User.findOne({
         where: {
-            userName: req.body.userName
+            userName: req.body.user.username
         }
     })
         .then(user => {
             if(user){
-                bcrypt.compare(req.body.password, user.password, (err, matches) => {
+                bcrypt.compare(req.body.user.password, user.password, (err, matches) => {
                     if(matches){
                         let token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24})
                         res.json({
